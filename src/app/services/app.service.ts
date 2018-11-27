@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 
-import { Cookie } from 'ng2-cookies/ng2-cookies'; 
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,13 +12,21 @@ export class AppService {
 
   constructor(public http: HttpClient) { }
 
+  public getUserFromLS() {
+    return JSON.parse(localStorage.getItem('userInfo'));
+  }
+
+  public setUserInLS(data) {
+    localStorage.setItem('userInfo', JSON.stringify(data));
+  }
+
   public signup(data): Observable<any> {
     const params = new HttpParams()
       .set('firstName', data.firstName)
       .set('lastName', data.lastName)
-      .set('mobile', data.mobile)
+      .set('mobileNumber', data.mobileNumber)
       .set('email', data.email)
-      .set('passowrd', data.password)
+      .set('password', data.password)
       .set('apiKey', data.apiKey);
 
     return this.http.post(`${this.baseUrl}/api/v1/users/signup`, params);
