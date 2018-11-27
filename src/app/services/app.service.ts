@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
@@ -10,17 +10,17 @@ export class AppService {
 
   private baseUrl = 'https://chatapi.edwisor.com';
 
-  constructor(public http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  public getUserFromLS() {
+  getUserFromLS() {
     return JSON.parse(localStorage.getItem('userInfo'));
   }
 
-  public setUserInLS(data) {
+  setUserInLS(data) {
     localStorage.setItem('userInfo', JSON.stringify(data));
   }
 
-  public signup(data): Observable<any> {
+  signup(data): Observable<any> {
     const params = new HttpParams()
       .set('firstName', data.firstName)
       .set('lastName', data.lastName)
@@ -32,7 +32,7 @@ export class AppService {
     return this.http.post(`${this.baseUrl}/api/v1/users/signup`, params);
   }
 
-  public login(data): Observable<any> {
+  login(data): Observable<any> {
     const params = new HttpParams()
       .set('email', data.email)
       .set('password', data.password);
@@ -40,11 +40,15 @@ export class AppService {
     return this.http.post(`${this.baseUrl}/api/v1/users/login`, params);
   }
 
-  private handleError(err: HttpErrorResponse) {
-    let errorMessage = '';
-    if(err.error instanceof Error) {
-      errorMessage = `An error occured ${err.error.message}`;
-    }
-  }
+  // private handleError(err: HttpErrorResponse) {
+  //   let errorMessage = '';
+  //   if(err.error instanceof Error) {
+  //     errorMessage = `An error occured ${err.error.message}`;
+  //   } else {
+  //     errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`
+  //   }
+  //   console.log(errorMessage);
+  //   return Observable.throw(errorMessage);
+  // }
 
 }

@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { ChatModule } from './chat/chat.module';
 import { LoginComponent } from './user/login/login.component';
 import { AppService } from './services/app.service';
+import { SocketService } from './services/socket.service';
 
 @NgModule({
   declarations: [
@@ -15,9 +16,9 @@ import { AppService } from './services/app.service';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     UserModule,
     ChatModule,
+    HttpClientModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent, pathMatch: 'full'},
       {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -25,7 +26,8 @@ import { AppService } from './services/app.service';
     ])
   ],
   providers: [
-    AppService
+    AppService,
+    SocketService
   ],
   bootstrap: [AppComponent]
 })
