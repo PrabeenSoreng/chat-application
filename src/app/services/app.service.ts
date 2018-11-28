@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 @Injectable({
   providedIn: 'root'
@@ -40,15 +41,24 @@ export class AppService {
     return this.http.post(`${this.baseUrl}/api/v1/users/login`, params);
   }
 
-  // private handleError(err: HttpErrorResponse) {
-  //   let errorMessage = '';
-  //   if(err.error instanceof Error) {
-  //     errorMessage = `An error occured ${err.error.message}`;
-  //   } else {
-  //     errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`
-  //   }
-  //   console.log(errorMessage);
-  //   return Observable.throw(errorMessage);
-  // }
+  logout(): Observable<any> {
+
+    const params = new HttpParams()
+      .set('authToken', Cookie.get('authToken'))
+
+    return this.http.post(`${this.baseUrl}/api/v1/users/logout`, params);
+
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage = '';
+    if(err.error instanceof Error) {
+      errorMessage = `An error occured ${err.error.message}`;
+    } else {
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`
+    }
+    console.log(errorMessage);
+    return Observable.throw(errorMessage);
+  }
 
 }

@@ -26,8 +26,7 @@ import { SocketService } from './services/socket.service';
     ])
   ],
   providers: [
-    AppService,
-    SocketService
+    AppService
   ],
   bootstrap: [AppComponent]
 })

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { SocketService } from '../services/socket.service';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
     {path: 'chat', component: ChatBoxComponent}
     ])
   ],
-  declarations: [ChatBoxComponent]
+  declarations: [ChatBoxComponent],
+  providers: [SocketService]
 })
 export class ChatModule { }

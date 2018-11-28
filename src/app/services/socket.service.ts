@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient } from '@angular/common/http';
 
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class SocketService {
   private baseUrl = 'https://chatapi.edwisor.com';
   private socket;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.socket = io(this.baseUrl);
   }
 
@@ -44,17 +46,44 @@ export class SocketService {
     this.socket.emit('set-user', authToken);
   }
 
-  // private handleError(err: HttpErrorResponse) {
-  //   let errorMessage = '';
-    
-  //   if(err.error instanceof Error){
-  //     errorMessage = `An error occured: ${err.error.message}`;
-  //   }
-  //   else {
-  //     errorMessage = `Server returned code: ${err.status}, error message is ${err.message}`;
-  //   }
+  markChatAsSeen(userDetails) {
+    this.socket.emit('mark-chat-as-seen', userDetails);
+  }
 
-  //   console.log(errorMessage);
-  //   return Observable.throw(errorMessage);
-  // }
+  getChat(senderId, receiverId, skip): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/v1/chat/get/for/user?senderId=${senderId}&receiverId=${receiverId}&skip=${skip}&authToken=${Cookie.get('authToken')}`).pipe(
+      tap(data => console.log("Data Received")),
+      catchError(this.handleError)
+    )
+  }
+
+  chatByUserId(userId) {
+    return Observable.create(observer => {
+      this.socket.on(userId, data => {
+        observer.next(data);
+      });
+    });
+  }
+
+  SendChatMessage(chatMsgObject) {
+    this.socket.emit('chat-msg', chatMsgObject);
+  }
+
+  exitSocket() {
+    this.socket.disconnect();
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage = '';
+    
+    if(err.error instanceof Error){
+      errorMessage = `An error occured: ${err.error.message}`;
+    }
+    else {
+      errorMessage = `Server returned code: ${err.status}, error message is ${err.message}`;
+    }
+
+    console.log(errorMessage);
+    return Observable.throw(errorMessage);
+  }
 }
