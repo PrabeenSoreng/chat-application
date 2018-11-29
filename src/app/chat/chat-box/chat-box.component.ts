@@ -185,4 +185,8 @@ export class ChatBoxComponent implements OnInit {
       });
   }
 
+  showUserName(name: string) {
+    console.log("You are chatting with " + name);
+  }
+
 }
