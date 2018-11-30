@@ -40,20 +40,20 @@ export class ChatBoxComponent implements OnInit {
   ngOnInit() {
     this.authToken = Cookie.get('authToken');
     this.userInfo = this.appService.getUserFromLS();
-    this.checkStatus();
+    // this.checkStatus();
     this.verifyUserConfirmation();
     this.getOnlineUserList();
     this.getMessageFromUser();
   }
 
-  checkStatus() {
-    if(Cookie.get('authToken') === undefined || Cookie.get('authToken') === '' || Cookie.get('authToken') === null){
-      this.router.navigate(['/']);
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // checkStatus() {
+  //   if(Cookie.get('authToken') === undefined || Cookie.get('authToken') === '' || Cookie.get('authToken') === null){
+  //     this.router.navigate(['/']);
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
   verifyUserConfirmation() {
     this.socketService.verifyUser()
